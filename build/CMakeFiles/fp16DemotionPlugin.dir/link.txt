@@ -1,0 +1,1 @@
+/opt/homebrew/opt/llvm/bin/clang++ -std=c++17 -std=c++17 -stdlib=libc++ -arch arm64 -bundle -Wl,-headerpad_max_install_names -undefined dynamic_lookup -o libfp16DemotionPlugin.dylib CMakeFiles/fp16DemotionPlugin.dir/src/Fp16DemotionPlugin.cpp.o
