@@ -25,6 +25,7 @@ namespace {
 const float FP16_MAX = 65504.0f;
 const float FP16_MIN = -65504.0f;
 const float FP16_MIN_POSITIVE = 6.103515625e-5f; // 2^-14
+const float SMALL_DIVISION_THRESHOLD = 0.001f;   // Threshold for "small number" in division
 
 class Fp16TypeChecker {
 public:
@@ -41,7 +42,8 @@ public:
         return true;
     }
     
-    static bool canDemoteFloatExpr(const Expr* E, ASTContext* Context) {
+    // Overload: returns false and sets reason if not demotable
+    static bool canDemoteFloatExpr(const Expr* E, ASTContext* Context, std::string* Reason = nullptr) {
         if (!E || !Context)
             return false;
             
@@ -70,8 +72,8 @@ public:
         
         // Handle binary operations
         if (const auto* BO = dyn_cast<BinaryOperator>(E)) {
-            bool CanDemoteLHS = canDemoteFloatExpr(BO->getLHS(), Context);
-            bool CanDemoteRHS = canDemoteFloatExpr(BO->getRHS(), Context);
+            bool CanDemoteLHS = canDemoteFloatExpr(BO->getLHS(), Context, Reason);
+            bool CanDemoteRHS = canDemoteFloatExpr(BO->getRHS(), Context, Reason);
             
             // For division, check for very small denominators
             if (BO->getOpcode() == BO_Div) {
@@ -81,7 +83,8 @@ public:
                     Val.toString(Str);
                     float FloatVal;
                     if (sscanf(Str.c_str(), "%f", &FloatVal) == 1 && 
-                        std::fabs(FloatVal) < FP16_MIN_POSITIVE) {
+                        std::fabs(FloatVal) < SMALL_DIVISION_THRESHOLD) {
+                        if (Reason) *Reason = "division by small number";
                         return false;  // Avoid division by very small numbers
                     }
                 }
@@ -92,12 +95,13 @@ public:
         
         // Handle unary operations
         if (const auto* UO = dyn_cast<UnaryOperator>(E)) {
-            return canDemoteFloatExpr(UO->getSubExpr(), Context);
+            return canDemoteFloatExpr(UO->getSubExpr(), Context, Reason);
         }
         
         // Handle function calls - conservative approach
         if (isa<CallExpr>(E)) {
             // Don't demote variables used in function calls unless we can analyze the function
+            if (Reason) *Reason = "used in function call";
             return false;
         }
         
@@ -161,8 +165,12 @@ public:
         
         // Check variable initialization
         if (const Expr* Init = VD->getInit()) {
-            if (!checkUseExpr(Init, Visited)) {
-                emitRangeDiagnostic(VD, "initialization value out of __fp16 range");
+            std::string reason;
+            if (!checkUseExpr(Init, Visited, &reason)) {
+                if (reason.empty()) {
+                    reason = "initialization value out of __fp16 range";
+                }
+                emitRangeDiagnostic(VD, reason);
                 IsSafe = false;
             }
         }
@@ -228,7 +236,7 @@ public:
     }
 
 private:
-    bool checkUseExpr(const Expr* E, std::unordered_set<const Expr*>& Visited) {
+    bool checkUseExpr(const Expr* E, std::unordered_set<const Expr*>& Visited, std::string* Reason = nullptr) {
         if (!E || !Context)
             return true;
             
@@ -238,7 +246,7 @@ private:
         Visited.insert(E);
         E = E->IgnoreParenCasts();
         
-        return Fp16TypeChecker::canDemoteFloatExpr(E, Context);
+        return Fp16TypeChecker::canDemoteFloatExpr(E, Context, Reason);
     }
     
     void emitDemotionDiagnostic(VarDecl* Decl) {
