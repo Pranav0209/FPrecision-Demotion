@@ -1,0 +1,47 @@
+[
+  {
+    "value": 1.000000,
+    "downcast": 1.000000,
+    "error": 0.000000,
+    "mode": "fp16",
+    "safe": true,
+    "reason": "",
+    "location": "simple_demo.c:6, col 19"
+  },
+  {
+    "value": 2.500000,
+    "downcast": 2.500000,
+    "error": 0.000000,
+    "mode": "fp16",
+    "safe": true,
+    "reason": "",
+    "location": "simple_demo.c:7, col 19"
+  },
+  {
+    "value": 100.000000,
+    "downcast": 100.000000,
+    "error": 0.000000,
+    "mode": "fp16",
+    "safe": true,
+    "reason": "",
+    "location": "simple_demo.c:8, col 19"
+  },
+  {
+    "value": 70000.000000,
+    "downcast": inf,
+    "error": inf,
+    "mode": "fp16",
+    "safe": false,
+    "reason": "literal value out of __fp16 range",
+    "location": "simple_demo.c:11, col 21"
+  },
+  {
+    "value": 0.000000,
+    "downcast": 0.000000,
+    "error": 1.000000,
+    "mode": "fp16",
+    "safe": false,
+    "reason": "literal value loses precision when converted to __fp16",
+    "location": "simple_demo.c:12, col 21"
+  }
+]

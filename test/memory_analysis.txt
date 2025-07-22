@@ -1,0 +1,29 @@
+FP16 Demotion Plugin - Memory Usage Analysis
+==========================================
+
+VARIABLES:
+  Total float variables found: 5
+  Successfully demoted: 3
+  Demotion success rate: 60.0%
+
+LITERALS:
+  Total float literals found: 5
+  Successfully demoted: 3
+  Demotion success rate: 60.0%
+
+MEMORY USAGE:
+  Original memory usage: 40 bytes
+  After demotion: 28 bytes
+  Memory saved: 12 bytes
+  Memory reduction: 30.0%
+
+BREAKDOWN:
+  Float (4 bytes each): 10 items
+  __fp16 (2 bytes each): 6 items
+  Remaining float: 4 items
+
+EXPLANATION:
+- Each 'float' uses 4 bytes of memory
+- Each '__fp16' uses 2 bytes of memory
+- Successful demotion saves 2 bytes per item
+- Unsafe items remain as float (4 bytes) for correctness
