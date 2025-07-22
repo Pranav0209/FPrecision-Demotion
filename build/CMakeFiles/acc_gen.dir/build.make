@@ -53,10 +53,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/pranavmotamarri/Documents/CD Project"
+CMAKE_SOURCE_DIR = "/Users/pranavmotamarri/Documents/CDProject copy"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/pranavmotamarri/Documents/CD Project/build"
+CMAKE_BINARY_DIR = "/Users/pranavmotamarri/Documents/CDProject copy/build"
 
 # Utility rule file for acc_gen.
 
@@ -81,6 +81,6 @@ CMakeFiles/acc_gen.dir/clean:
 .PHONY : CMakeFiles/acc_gen.dir/clean
 
 CMakeFiles/acc_gen.dir/depend:
-	cd "/Users/pranavmotamarri/Documents/CD Project/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/pranavmotamarri/Documents/CD Project" "/Users/pranavmotamarri/Documents/CD Project" "/Users/pranavmotamarri/Documents/CD Project/build" "/Users/pranavmotamarri/Documents/CD Project/build" "/Users/pranavmotamarri/Documents/CD Project/build/CMakeFiles/acc_gen.dir/DependInfo.cmake" "--color=$(COLOR)"
+	cd "/Users/pranavmotamarri/Documents/CDProject copy/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/pranavmotamarri/Documents/CDProject copy" "/Users/pranavmotamarri/Documents/CDProject copy" "/Users/pranavmotamarri/Documents/CDProject copy/build" "/Users/pranavmotamarri/Documents/CDProject copy/build" "/Users/pranavmotamarri/Documents/CDProject copy/build/CMakeFiles/acc_gen.dir/DependInfo.cmake" "--color=$(COLOR)"
 .PHONY : CMakeFiles/acc_gen.dir/depend
 
